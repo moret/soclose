@@ -4,6 +4,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "benchmark": "babel-node benchmark/distanceBenchmark",
     "test": "jasmine"
   },
   "dependencies": {
