@@ -18,24 +18,66 @@ curl 'localhost:3000/words/a%C3%A7a%C3%AD'
 ```
 Try someone like https://insomnia.rest/ instead of cURL for non-ascii words.
 
-### Getting ready to run
-Just:
+### Get ready
+
 ```
 yarn
 ```
-And it's ready.
 
-## Developing
+## Development
 
-### Running tests
+### Test
 
 ```
 yarn test
 ```
 
-## Running
+### Start and auto-reload on changes in development
 
-### NIY
+```
+yarn start
+```
+
+## Usage
+
+### Routes
+
+_All `:text` with non-ascii characters must be urlencoded._
+
+- **GET** `/words`: Shows all stored words. _Careful: no pagination available._
+- **GET** `/words/:text`: Get the stored word and its status. It might be
+`processing` or `processed`, indicating if it's still calculating against the
+words stored before it or if it's done.
+- **PUT** `/words/:text`: Store a word and starts a job to calculate its
+distance to all words previously stored. If the word didn't exist, it returns
+the status code `201 Created`. If it did it returns `403 Forbidden`.
+- **GET** `/words/:text/similar(/:threshold)`: List similar stored words with
+calculated distances within a threshold of the given `:text` keyword. The
+default threshold is `3`, or optionally set by `:threshold`. In any case, the
+maximum threshold that will be used is half the size of the given word. E.g.,
+`maça` maximum store threshold is `2`, while `banana` is `3`. _Careful: no
+pagination available._
+
+Jobs are visible at `/jobs` from any browser protected by basic auth. The
+default login/password is `admin/admin`
+
+### Build and start in production
+
+```
+yarn build
+yarn start-production
+```
+
+### Environment Variables
+
+- `ADMIN_USERS_JSON`: configures users and passwords for the basic auth
+protecting the `/jobs` path. Must be a JSON object, the key is the username and
+the value the password. Ex.: `{ "alice": "mirror", "bob": "home" }`. _Default:
+`{ "admin": "admin" }`._
+- `MONGO`: MongoDB connection string. _Default:`mongodb://localhost/soclose`._
+- `REDIS_HOST`: Redis hostname. _Default:`localhost`._
+- `REDIS_PORT`: Redis port. _Default:`6379`._
+- `PORT`: Port on which to run the Express webserver. _Default:`3000`._
 
 ## Rationale
 
