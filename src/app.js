@@ -33,11 +33,21 @@ app.get('/words/:text', async (req, res) => {
   }
 });
 app.put('/words/:text', async (req, res) => {
-  const text = req.params.text;
-  const newWord = new Word({ text, status: 'added' });
-  await newWord.save();
-  newWordDistancesQueue.add({ newWord });
-  res.send(newWord);
+  try {
+    const text = req.params.text;
+    const word = await Word.findOne({ text });
+    if (word) {
+      res.sendStatus(403);
+    } else {
+      const newWord = new Word({ text, status: 'processing' });
+      await newWord.save();
+      newWordDistancesQueue.add({ text });
+      res.sendStatus(201);
+    }
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
 });
 
 export default app;
