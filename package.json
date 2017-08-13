@@ -8,20 +8,23 @@
     "build": "babel src -d build",
     "start": "nodemon src/server --watch src --exec babel-node",
     "start-production": "node build/server",
-    "test": "DISABLE_MORGAN=true jasmine"
+    "test": "NODE_ENV=test jasmine"
   },
   "dependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.24.1",
     "bull": "^3.0.0-rc.5",
     "bull-arena": "^2.1.0",
     "express": "^4.15.4",
     "express-basic-auth": "^1.1.1",
     "fast-levenshtein": "^2.0.6",
-    "jasmine": "^2.7.0",
     "mongoose": "^4.11.6",
-    "morgan": "^1.8.2",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-rewire": "^1.1.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.24.1",
+    "jasmine": "^2.7.0",
     "nodemon": "^1.11.0",
     "supertest": "^3.0.0"
   }

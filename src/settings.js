@@ -7,12 +7,10 @@ const redis = {
   port: Number(process.env.REDIS_PORT || 6379),
 };
 const port = Number(process.env.PORT || 3000);
-const disableMorgan = process.env.DISABLE_MORGAN || false;
 
 export {
   adminUsers,
   mongo,
   redis,
   port,
-  disableMorgan,
 };

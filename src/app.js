@@ -1,12 +1,12 @@
 import express from 'express';
 import morgan from 'morgan';
 import basicAuth from 'express-basic-auth';
-import { adminUsers, disableMorgan } from './settings';
+import { adminUsers } from './settings';
 import { arenaMiddleware, newWordDistancesQueue } from './queues';
 import { Word } from './models';
 
 const app = express();
-if (!disableMorgan) app.use(morgan('tiny'));
+if (process.env.NODE_ENV != 'test') app.use(morgan('tiny'));
 app.use('/jobs', basicAuth({ users: JSON.parse(adminUsers), challenge: true }));
 app.use(arenaMiddleware);
 app.get('/words', async (req, res) => {

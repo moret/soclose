@@ -1,13 +1,14 @@
 import request from 'supertest';
 import app from '../src/app';
 import { newWordDistancesQueue } from '../src/queues';
-import { Word } from '../src/models';
+import { Word, WordToWordDistance } from '../src/models';
 
 let body, status, text;
 const mockedFailure = new Error('Mocked Failure');
 
 beforeEach(async () => {
   await Word.remove({});
+  await WordToWordDistance.remove({});
 });
 
 describe('get /words', () => {
