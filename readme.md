@@ -135,3 +135,24 @@ data, plus any DB overhead needed. If the database has the option to keep the
 data indexed in memory it will be fast enough to work almost like a cache -
 although this doesn't invalidate the presence of one, but with simpler rules and
 low expiration times.
+
+## Utils
+
+### Distance benchmark
+
+This benchmark measure one word - banana - against 450k+ english words without
+using database or server:
+```
+yarn benchmark
+```
+Results with third-party library: `elapsed time: 16991ms`
+Results with in house full-matrix implementation: `elapsed time: 17157ms`
+
+### Seed database with fruits
+
+This scrit _clears up the database_, adds a list of fruits, and calculates their
+distances using whe database and a server instance - no need to have it running
+before:
+```
+yarn seed
+```

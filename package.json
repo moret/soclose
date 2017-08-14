@@ -4,8 +4,9 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "benchmark": "babel-node benchmark/distanceBenchmark",
+    "benchmark": "babel-node dev/distanceBenchmark",
     "build": "babel src -d build",
+    "seed": "babel-node dev/seedFruits",
     "start": "nodemon src/server --watch src --exec babel-node",
     "start-production": "node build/server",
     "test": "NODE_ENV=test MONGO=mongodb://localhost/soclose-tests REDIS_DB=10 jasmine"
