@@ -20,7 +20,7 @@ app.get('/words', async (req, res) => {
 });
 app.get('/words/:text', async (req, res) => {
   try {  
-    const text = req.params.text;
+    const text = req.params.text.toLowerCase();
     const word = await Word.findOne({ text });
     if (word) {
       res.send(word);
@@ -37,7 +37,7 @@ app.get('/words/:text/similar', async (req, res) => {
     const givenThreshold = req.query.threshold;
     const validThreshold = givenThreshold && Number(givenThreshold) >= 0;
     if (givenThreshold == undefined || validThreshold) {
-      const text = req.params.text;
+      const text = req.params.text.toLowerCase();
       const word = await Word.findOne({ text });
       if (word) {
         const threshold = givenThreshold == undefined
@@ -67,7 +67,7 @@ app.get('/words/:text/similar', async (req, res) => {
 });
 app.put('/words/:text', async (req, res) => {
   try {
-    const text = req.params.text;
+    const text = req.params.text.toLowerCase();
     const word = await Word.findOne({ text });
     if (word) {
       res.sendStatus(403);

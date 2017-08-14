@@ -68,6 +68,16 @@ describe('get /words/:text', () => {
       expect(body.text).toBe('banana');
       expect(body.status).toBe('processing');
     });
+
+    describe('with capital letters', () => {
+      beforeEach(async () => {
+        ({ body } = await request(app).get('/words/BaNaNa'));
+      });
+
+      it('gets the lowercased word anyway', async () => {
+        expect(body.text).toBe('banana');
+      });
+    })
   });
 
   describe('not stored word', () => {
@@ -136,7 +146,24 @@ describe('put /words/:text', () => {
         text: 'banana'
       });
     });
+
   });
+
+  describe('new word with capital letters', () => {
+    let noWord;
+    let word;
+
+    beforeEach(async () => {
+      noWord = await Word.findOne({ text: 'banana' });
+      await request(app).put('/words/BaNaNa');
+      word = await Word.findOne({ text: 'banana' });
+    });
+
+    it('creates the new word lowercased', async () => {
+      expect(noWord).toBeNull();
+      expect(word.text).toBe('banana');
+    });
+  })
 
   describe('existing word', () => {
     beforeEach(async () => {
@@ -212,6 +239,16 @@ describe('get /words/:text/similar', () => {
       expect(body[2].word).toBe('pará');
       expect(body[2].distance).toBe(3);
     });
+
+    describe('with capital letters', () => {
+      beforeEach(async () => {
+        ({ body } = await request(app).get('/words/PaRaIbA/similar'));
+      });
+
+      it('gets words from the lowercased given text', async () => {
+        expect(body.length).toBe(3);
+      });
+    })
   });
 
   describe('given threshold', () => {
