@@ -99,8 +99,8 @@ including English.
 Using the third-party
 [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein)
 to calculate the distance of one word against 450k+ english words - thanks to
-[english-words](https://github.com/dwyl/english-words) for the words dictionary
-- all in memory and in one process takes about 17s:
+[english-words](https://github.com/dwyl/english-words) for the words
+dictionary - all in memory and in one process takes about 17s:
 ```
 $ yarn benchmark
 (...)
@@ -145,8 +145,9 @@ using database or server:
 ```
 yarn benchmark
 ```
-Results with third-party library: `elapsed time: 16991ms`
-Results with in house full-matrix implementation: `elapsed time: 17157ms`
+Results with third-party library: `elapsed time: 16991ms`.
+
+Results with in house full-matrix implementation: `elapsed time: 17157ms`.
 
 ### Seed database with fruits
 
