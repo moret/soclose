@@ -1,11 +1,10 @@
-import mongoose from 'mongoose';
+import mongooseConnect from './mongooseConnect'
 import app from './app';
-import { mongo, port } from './settings';
+import { port } from './settings';
 
 async function main() {
   try {
-    mongoose.Promise = global.Promise;
-    await mongoose.connect(mongo, { useMongoClient: true });
+    await mongooseConnect();
     app.listen(port, () => console.log('So close! listening on 3000.'));
   } catch (e) {
     console.error(e);

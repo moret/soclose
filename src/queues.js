@@ -10,7 +10,8 @@ const arenaMiddleware = Arena(
         hostId: redis.host,
         name: "new word distances",
         host: redis.host,
-        port: redis.port
+        port: redis.port,
+        db: redis.db,
       }
     ]
   },
