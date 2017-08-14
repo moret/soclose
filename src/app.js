@@ -1,9 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import basicAuth from 'express-basic-auth';
-import { adminUsers } from './settings';
+import { adminUsers, defaultThreshold } from './settings';
 import { arenaMiddleware, newWordDistancesQueue } from './queues';
-import { Word } from './models';
+import { Word, WordToWordDistance } from './models';
 
 const app = express();
 if (process.env.NODE_ENV != 'test') app.use(morgan('tiny'));
@@ -26,6 +26,39 @@ app.get('/words/:text', async (req, res) => {
       res.send(word);
     } else {
       res.sendStatus(404);
+    }
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
+app.get('/words/:text/similar', async (req, res) => {
+  try {
+    const givenThreshold = req.query.threshold;
+    const validThreshold = givenThreshold && Number(givenThreshold) >= 0;
+    if (givenThreshold == undefined || validThreshold) {
+      const text = req.params.text;
+      const word = await Word.findOne({ text });
+      if (word) {
+        const threshold = givenThreshold == undefined
+          ? defaultThreshold
+          : Number(givenThreshold);
+        const wordToWordDistances = await WordToWordDistance.find({
+          $or: [
+            { textA: text },
+            { textB: text },
+          ],
+          distance: { $lte: threshold },
+        }).sort({ distance: 1 });
+        res.send(wordToWordDistances.map(({ textA, textB, distance }) => ({
+          word: ((text == textA) ? textB : textA),
+          distance,
+        })));
+      } else {
+        res.sendStatus(404);
+      }
+    } else {
+      res.sendStatus(400);
     }
   } catch (e) {
     console.error(e);

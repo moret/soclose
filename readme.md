@@ -51,11 +51,12 @@ words stored before it or if it's done.
 - **PUT** `/words/:text`: Store a word and starts a job to calculate its
 distance to all words previously stored. If the word didn't exist, it returns
 the status code `201 Created`. If it did it returns `403 Forbidden`.
-- **GET** `/words/:text/similar(/:threshold)`: List similar stored words with
-calculated distances within a threshold of the given `:text` keyword. The
-default threshold is `3`, or optionally set by `:threshold`. In any case, the
-maximum threshold that will be used is half the size of the given word. E.g.,
-`maça` maximum store threshold is `2`, while `banana` is `3`. _Careful: no
+- **GET** `/words/:text/similar(?threshold=:threshold)`: List similar stored
+words with calculated distances within a threshold of the given `:text` keyword.
+The default threshold is `3`, or optionally set by `:threshold`. In any case,
+the maximum threshold that will be used is half the size of the largest word in
+the compared distance, rounded up. E.g., `maça-uva` maximum stored threshold is
+`2` (not stored), while `abacate-banana` is `4` (stored). _Careful: no
 pagination available._
 
 Jobs are visible at `/jobs` from any browser protected by basic auth. The

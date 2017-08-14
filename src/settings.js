@@ -8,10 +8,12 @@ const redis = {
   db: Number(process.env.REDIS_DB || 0),
 };
 const port = Number(process.env.PORT || 3000);
+const defaultThreshold = Number(process.env.DEFAULT_THRESHOLD || 3);
 
 export {
   adminUsers,
   mongo,
   redis,
   port,
+  defaultThreshold,
 };
