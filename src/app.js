@@ -19,13 +19,17 @@ app.get('/words', async (req, res) => {
   }
 });
 app.get('/words/:text', async (req, res) => {
-  try {  
+  try {
     const text = req.params.text.toLowerCase();
-    const word = await Word.findOne({ text });
-    if (word) {
-      res.send(word);
+    if (text.length <= 50) {
+      const word = await Word.findOne({ text });
+      if (word) {
+        res.send(word);
+      } else {
+        res.sendStatus(404);
+      }
     } else {
-      res.sendStatus(404);
+      res.sendStatus(400);
     }
   } catch (e) {
     console.error(e);
@@ -36,8 +40,8 @@ app.get('/words/:text/similar', async (req, res) => {
   try {
     const givenThreshold = req.query.threshold;
     const validThreshold = givenThreshold && Number(givenThreshold) >= 0;
-    if (givenThreshold == undefined || validThreshold) {
-      const text = req.params.text.toLowerCase();
+    const text = req.params.text.toLowerCase();
+    if ((givenThreshold == undefined || validThreshold) && text.length <= 50) {
       const word = await Word.findOne({ text });
       if (word) {
         const threshold = givenThreshold == undefined
@@ -68,14 +72,18 @@ app.get('/words/:text/similar', async (req, res) => {
 app.put('/words/:text', async (req, res) => {
   try {
     const text = req.params.text.toLowerCase();
-    const word = await Word.findOne({ text });
-    if (word) {
-      res.sendStatus(403);
+    if (text.length <= 50) {
+      const word = await Word.findOne({ text });
+      if (word) {
+        res.sendStatus(403);
+      } else {
+        const newWord = new Word({ text, status: 'processing' });
+        await newWord.save();
+        newWordDistancesQueue.add({ text });
+        res.sendStatus(201);
+      }
     } else {
-      const newWord = new Word({ text, status: 'processing' });
-      await newWord.save();
-      newWordDistancesQueue.add({ text });
-      res.sendStatus(201);
+      res.sendStatus(400);
     }
   } catch (e) {
     console.error(e);

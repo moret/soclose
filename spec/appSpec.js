@@ -5,6 +5,7 @@ import { Word, WordToWordDistance } from '../src/models';
 
 let body, status, text;
 const mockedFailure = new Error('Mocked Failure');
+const longWord = 'taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu';
 
 beforeEach(async () => {
   await Word.remove({});
@@ -94,6 +95,20 @@ describe('get /words/:text', () => {
     });
   });
 
+  describe('word too long', () => {
+    beforeEach(async () => {
+      ({ status, text } = await request(app).get(`/words/${longWord}`));
+    });
+
+    it('responds with 400', () => {
+      expect(status).toBe(400);
+    });
+
+    it('says Bad Request', () => {
+      expect(text).toBe('Bad Request');
+    });
+  });
+
   describe('when an error occurs', () => {
     beforeEach(async () => {
       spyOn(console, 'error');
@@ -177,6 +192,20 @@ describe('put /words/:text', () => {
 
     it('says Forbidden', () => {
       expect(text).toBe('Forbidden');
+    });
+  });
+
+  describe('word too long', () => {
+    beforeEach(async () => {
+      ({ status, text } = await request(app).put(`/words/${longWord}`));
+    });
+
+    it('responds with 400', () => {
+      expect(status).toBe(400);
+    });
+
+    it('says Bad Request', () => {
+      expect(text).toBe('Bad Request');
     });
   });
 
@@ -305,6 +334,20 @@ describe('get /words/:text/similar', () => {
         });
       });
     })
+  });
+
+  describe('word too long', () => {
+    beforeEach(async () => {
+      ({ status, text } = await request(app).get(`/words/${longWord}/similar`));
+    });
+
+    it('responds with 400', () => {
+      expect(status).toBe(400);
+    });
+
+    it('says Bad Request', () => {
+      expect(text).toBe('Bad Request');
+    });
   });
 
   describe('not stored word', () => {
