@@ -16,7 +16,7 @@
     "bull-arena": "^2.1.0",
     "express": "^4.15.4",
     "express-basic-auth": "^1.1.1",
-    "mongoose": "^4.11.6",
+    "mongoose": "^4.13.21",
     "morgan": "^1.8.2"
   },
   "devDependencies": {
